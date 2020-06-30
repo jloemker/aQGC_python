@@ -8,7 +8,7 @@ if(__name__=="__main__"):
     
     region='SignalRegion'
     channels=['ZZ']
-    cuts=['VVRegion','Kin_AK8'] # second cut is treated as VBF cut
+    cuts=['VVRegion',''] # second cut is treated as VBF cut
     for channel in channels:
         for cut in cuts:
             for op in dim8op:                

@@ -91,7 +91,7 @@ class Set:
             for key in SHistkeys:
                 # if( ('"M_jj_AK%i"'%self.jetRadius) in str(key)):
                 #     self.RefHist=key.ReadObj()
-                if ( (dim8op not in str(key)) or (('AK%i'%self.jetRadius) not in str(key))): 
+                if ( (dim8op not in str(key)) or (('AK%i'%self.jetRadius) not in str(key)) or ('pT_AK8_12_' not in str(key))): 
                     continue
                 if(i==0):
                     self.SHists.append(key.ReadObj())
@@ -168,13 +168,14 @@ class Set:
            # backgroundHist.Write('qcd_invMass'+name_suffix)
            # sidebandDataHist.Write('data_invMass'+name_suffix)
 
-           import numpy as np
-           binning = np.linspace(0,8000,8001)
-           signalHist=self.SHists[i].Rebin(len(binning)-1, '', binning)
-           backgroundHist=self.BHist.Rebin(len(binning)-1, '', binning)
+           #import numpy as np
+           #binning = np.linspace(0,8000,8001)
+           #signalHist=self.SHists[i].Rebin(len(binning)-1, '', binning)
+           #backgroundHist=self.BHist.Rebin(len(binning)-1, '', binning)
+
            # #For SignalInjectionTest #try this -> sig+bg shapes to pseudo sig+bg points
-           #signalHist=self.SHists[i] 
-           #backgroundHist=self.BHist
+           signalHist=self.SHists[i] 
+           backgroundHist=self.BHist
            fakedataHist=backgroundHist.Clone()
            fakedataHist.Add(signalHist)
            signalHist.Write('radion_pT'+name_suffix)
