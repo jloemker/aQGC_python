@@ -84,8 +84,10 @@ class Set:
                 rootdir_suffix=rootdir_suffixe[channelgroups[self.channel][i]]
             else:
                 rootdir_suffix=rootdir_suffixe[self.channel]
-            
-            SHistDir=self.SFiles[i].GetDirectory('Kin_AK8_%s'%(tmpCut))
+
+            SHistDir_name = tmpCut if tmpCut=="Kin_AK8" else 'Kin_AK8_%s'%(tmpCut)
+            SHistDir=self.SFiles[i].GetDirectory(SHistDir_name)
+            #SHistDir=self.SFiles[i].GetDirectory('Kin_AK8_%s'%(tmpCut))
             SHistkeys=SHistDir.GetListOfKeys()
             j=0
             for key in SHistkeys:
@@ -114,7 +116,9 @@ class Set:
         #     self.SHists.append(key.ReadObj())
 
         # self.RefHist=self.SFile.Get('%s/M_jj_AK%i_highbin'%(self.LastCut,self.jetRadius))
-
+        #BHistDir_name = tmpCut if tmpCut=="Kin_AK8" else 'Kin_AK8_%s'%(tmpCut)
+        #BHistDir=self.BFile.GetDirectory(BHistDir_name)
+        #self.BHist=BHistDir.Get('%s/pT_AK%i_12'%(self.LastCut,self.jetRadius))
         self.BHist=self.BFile.Get('%s/pT_AK%i_12'%(self.LastCut,self.jetRadius))
         # self.sidebandDataFile=TFile(self.UHH2_Output + '/SidebandRegion/uhh2.AnalysisModuleRunner.Data.DATA.root')
         # self.sidebandDataHist=self.sidebandDataFile.Get('%s/M_jj_AK%i_highbin'%(self.LastCut,self.jetRadius))
@@ -168,14 +172,14 @@ class Set:
            # backgroundHist.Write('qcd_invMass'+name_suffix)
            # sidebandDataHist.Write('data_invMass'+name_suffix)
 
-           #import numpy as np
-           #binning = np.linspace(0,8000,8001)
-           #signalHist=self.SHists[i].Rebin(len(binning)-1, '', binning)
-           #backgroundHist=self.BHist.Rebin(len(binning)-1, '', binning)
+           import numpy as np
+           binning = np.linspace(0,8000,8001)
+           signalHist=self.SHists[i].Rebin(len(binning)-1, '', binning)
+           backgroundHist=self.BHist.Rebin(len(binning)-1, '', binning)
 
            # #For SignalInjectionTest #try this -> sig+bg shapes to pseudo sig+bg points
-           signalHist=self.SHists[i] 
-           backgroundHist=self.BHist
+           #signalHist=self.SHists[i] 
+           #backgroundHist=self.BHist
            fakedataHist=backgroundHist.Clone()
            fakedataHist.Add(signalHist)
            signalHist.Write('radion_pT'+name_suffix)
