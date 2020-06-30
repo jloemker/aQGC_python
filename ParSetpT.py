@@ -85,7 +85,7 @@ class Set:
             else:
                 rootdir_suffix=rootdir_suffixe[self.channel]
             
-            SHistDir=self.SFiles[i].GetDirectory('Kin_AK8')
+            SHistDir=self.SFiles[i].GetDirectory('Kin_AK8_%s'%(tmpCut))
             SHistkeys=SHistDir.GetListOfKeys()
             j=0
             for key in SHistkeys:
