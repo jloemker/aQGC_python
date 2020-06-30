@@ -130,7 +130,7 @@ class Set:
             self.dijetbinning.append(boundaries[i])
 
     def CombinedRootFiles(self,path='',VBF_cut='Kin_AK8'):
-
+        pT_suffix = '_pT'
         VBF=(self.LastCut==VBF_cut)
         if(VBF):
             name_suffix='_afterVBFsel'
@@ -140,11 +140,11 @@ class Set:
         for i in range(len(self.SHists)):         
            filename=self.getFileName(i)
            if(VBF):
-               oFile= TFile(path+"/%s.root"%filename,"UPDATE");
+               oFile= TFile(path+"/%s_pT.root"%filename,"UPDATE");
                # file= TFile(path+"/%s_SignalInjection.root"%filename,"UPDATE");
                # file= TFile(path+"/%s_SidebandData.root"%filename,"UPDATE");
            else:
-               oFile= TFile(path+"/%s.root"%filename,"RECREATE");
+               oFile= TFile(path+"/%s_pT.root"%filename,"RECREATE");
                # file= TFile(path+"/%s_SignalInjection.root"%filename,"RECREATE");
                # file= TFile(path+"/%s_SidebandData.root"%filename,"RECREATE");
            if(not oFile.IsOpen()):
@@ -169,7 +169,7 @@ class Set:
            # sidebandDataHist.Write('data_invMass'+name_suffix)
 
            import numpy as np
-           binning = np.linspace(0,10000,10001)
+           binning = np.linspace(0,8000,8001)
            signalHist=self.SHists[i].Rebin(len(binning)-1, '', binning)
            backgroundHist=self.BHist.Rebin(len(binning)-1, '', binning)
            # #For SignalInjectionTest #try this -> sig+bg shapes to pseudo sig+bg points

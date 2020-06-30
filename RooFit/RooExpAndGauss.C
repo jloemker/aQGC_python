@@ -48,14 +48,17 @@
 
  Double_t RooExpAndGauss::evaluate() const 
  { 
-   // ENTER EXPRESSION IN TERMS OF VARIABLE ARGUMENTS HERE 
+   // ENTER EXPRESSION IN TERMS OF VARIABLE ARGUMENTS HERE ___________________**Switched return!
  double beta = (sh_mean - sh_trans)/(sh_sigma*sh_sigma);
  double c = exp(-0.5*pow((sh_trans-sh_mean)/sh_sigma,2))*exp(-beta*sh_trans);
  if (x <= sh_trans){ 
-	 return c*exp(beta*x);
- };
+	  //think a 1/2 was missed before BsMuMuPy v4.4
 
- return exp(-0.5*pow((x-sh_mean)/sh_sigma,2)); //think a 1/2 was missed before BsMuMuPy v4.4
+  return exp(-0.5*pow((x-sh_mean)/sh_sigma,2));
+   //return c*exp(beta*x);
+ };
+  return c*exp(beta*x);
+ //return exp(-0.5*pow((x-sh_mean)/sh_sigma,2)); think a 1/2 was missed before BsMuMuPy v4.4
   
  } 
 

@@ -32,13 +32,20 @@ gStyle.SetLegendBorderSize(0)
 
 def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSignal=0,UserRange=[None,None,None,None],initPath=''):
 
-    channelTex={'WPWP':'W^{+}W^{+}','WPWM':'W^{+}W^{-}','WMWM':'W^{-}W^{-}','WPZ':'W^{+}Z','WMZ':'W^{-}Z','ZZ':'ZZ'}
-    plotstyle=[(1,1),(1,2),(2,1),(2,2),(4,1),(4,2)]
+   # channelTex={'WPWP':'W^{+}W^{+}', 'WPWM':'W^{+}W^{-}','WMWM':'W^{-}W^{-}','WPZ':'W^{+}Z','WMZ':'W^{-}Z','ZZ':'ZZ'}
+    channelTex={'ZZ':'ZZ'}
+   # plotstyle=[(1,1),(1,2),(2,1),(2,2),(4,1),(4,2)]
+    plotstyle=[(1,1)]
     #             0              1                       2                        3             4              5             6
-    Backgrounds=['QCD',         'WJetsToQQ_HT600ToInf', 'ZJetsToQQ_HT600ToInf',  'TT',         'WW',          'WZ',         'ZZ']
-    BGColors=   [rt.kAzure+7,   rt.kRed-4,              rt.kOrange-2,            rt.kGreen+2,  rt.kOrange+7,  rt.kBlue+1,   rt.kMagenta+2]
-    BGTeX=      ['QCD',         'W+JetsToQQ',           'Z+JetsToQQ',            'TTbar',      'WW',          'WZ',         'ZZ']
-    stackOrder= [4,5,6,2,1,3,0]
+   # Backgrounds=['QCD',     'WJetsToQQ_HT600ToInf', 'ZJetsToQQ_HT600ToInf',     'TT',         'WW',          'WZ',         'ZZ']
+   # BGColors=   [rt.kAzure+7,   rt.kRed-4,              rt.kOrange-2,            rt.kGreen+2,  rt.kOrange+7,  rt.kBlue+1,   rt.kMagenta+2]
+   # BGTeX=      ['QCD',        'W+JetsToQQ',           'Z+JetsToQQ',             'TTbar'],      'WW',          'WZ',         'ZZ']
+    #stackOrder= [4,5,6,2,1,3,0]
+    Backgrounds=['QCD']# 'WJetsToQQ_HT600ToInf', 'ZJetsToQQ_HT600ToInf', 'ZZ']  'TT',         'WW',          'WZ',         'ZZ']
+    BGColors=   [rt.kAzure+7]#,              rt.kOrange-2,            rt.kGreen+2],  rt.kOrange+7,  rt.kBlue+1,   rt.kMagenta+2]
+    BGTeX=      ['QCD']#
+
+    stackOrder=[0]
 
     PreSelection=['nocuts',
                   'common',
@@ -80,7 +87,8 @@ def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSign
     VV=('VV' in channels)
     seperate=(not VV)
     if VV:
-        channels=["WPWP","WPWM","WMWM","WPZ","WMZ","ZZ"]
+        #channels=["WPWP","WPWM","WMWM","WPZ","WMZ","ZZ"]
+        channels=["ZZ"]
 
     plottitle=plotdir+'_'+plot
 
@@ -122,10 +130,10 @@ def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSign
     referenceHistPath=plotdir+'/'+plot
 
     if(initPath==''):
-        path='/nfs/dust/cms/user/albrechs/UHH2_Output/%s/'%region
+        path='/nfs/dust/cms/user/loemkerj/bachelor/CMSSW_10_2_16/src/UHH2/aQGCVVjjhadronic/%s'%region
     else:
         path=initPath
-    outputPath=path.replace('/nfs/dust/cms/user/albrechs/UHH2_Output/','Plots/')
+    outputPath=path.replace('/nfs/dust/cms/user/loemkerj/bachelor/CMSSW_10_2_16/src/UHH2/aQGCVVjjhadronic/SignalRegion','plots/')
     if(plotdir in PreSelection):
         CutNumber=PreSelection.index(plotdir)
     else:
@@ -170,15 +178,15 @@ def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSign
     gROOT.ProcessLine( "gErrorIgnoreLevel = 2001;")
     SFiles=[]
     for i in range(len(channels)):
-        SFiles.append(TFile(path+"/uhh2.AnalysisModuleRunner.MC.MC_aQGC_%sjj_hadronic.root"%channels[i]))
-
+        SFiles.append(TFile(path+"/uhh2.AnalysisModuleRunner.MC.MC_aQGC_%sjj_hadronic_2016v3.root"%channels[i]))
+ #uhh2.AnalysisModuleRunner.MC.MC_aQGC_ZZjj_hadronic_2016v3.root
     ##Open Files to get BackgroundHist:
     BFiles=[]
     for i in range(len(Backgrounds)):
         BFiles.append(TFile(path+"/uhh2.AnalysisModuleRunner.MC.MC_%s.root"%Backgrounds[i]))
 
     #Open File to get DataHist:
-    DataFile = TFile(path+"/uhh2.AnalysisModuleRunner.Data.DATA.root")
+   # DataFile = TFile(path+"/uhh2.AnalysisModuleRunner.Data.DATA.root")
 
     # gROOT.ProcessLine( "gErrorIgnoreLevel = 0;")
 
@@ -279,7 +287,7 @@ def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSign
 
     # for i in range(len(Backgrounds)):
     for i in stackOrder:
-        BHists[i].SetFillColor(BGColors[i])
+       # BHists[i].SetFillColor(BGColors[i])
         BHists[i].SetLineColor(BGColors[i])
         BHist.Add(BHists[i],'Hist')
 
@@ -295,13 +303,13 @@ def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSign
 
     BGMax=BHist.GetMaximum()
     SIGMax=0
-    if(VV):
-        SIGMax=VVsum.GetMaximum()
-    else:
-        for i in range(len(channels)):
-            tmpmax=SHists[i].GetMaximum()
-            if(tmpmax>SIGMax):
-                SIGMax=tmpmax
+    #if(VV):       #new
+    #    SIGMax=VVsum.GetMaximum()
+    #else:
+    for i in range(len(channels)):
+        tmpmax=SHists[i].GetMaximum()
+        if(tmpmax>SIGMax):
+            SIGMax=tmpmax
     if(scaleVV):
         SIGMax=SIGMax*VVScale        
     if(logY):
@@ -482,7 +490,7 @@ def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSign
             latex.DrawLatex(0.12,0.8-l*0.04,cuts[cutnames[l]])
 
     canv.Update()
-    canv.Print(outputPath+'/%s_%s.eps'%(plotdir,plot))
+    canv.Print(outputPath+'/%s_%s.pdf'%(plotdir,plot))
     #prevents memory leak in Canvas Creation/Deletion
     #see: https://root.cern.ch/root/roottalk/roottalk04/2484.html
     gSystem.ProcessEvents()
@@ -492,7 +500,9 @@ def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSign
     # gc.collect()
     return 'done!'
 if(__name__=='__main__'):
-    plotdir='AK8_invMAk4sel_1p0'
-
-    plot='mass'
-    plotter(plotdir, plot)
+    plotdir='invMAk4sel_1p0'
+    plot='M_jj_AK8'
+    xTitle='Mjj [GeV]'
+    logY=True
+    plotter('invMAk4sel_1p0', 'M_jj_AK8', 'Mjj [GeV]', True)
+#this works! Nice -> results in /plot directory :) ggf. lables checken wegen CR..aber kommt der glaube ich ganz gut nahe

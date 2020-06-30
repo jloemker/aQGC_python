@@ -5,6 +5,7 @@ from ROOT import RooRealVar, RooDataHist, RooPlot, RooGaussian, RooAbsData, RooF
 import ROOT as rt
 from RooFitHist import RooFitHist
 
+
 # if(sys.version_info[0] != 3):
 #     raise BaseException("You should run this with python 3")
 
@@ -19,8 +20,8 @@ gROOT.Reset()
 sets=collections.OrderedDict()
 
 class Set:
-    def __init__(self, dim8op,channelname,Cut,region,jR=8):
-        self.UHH2_Output = "/nfs/dust/cms/user/albrechs/UHH2_Output/"
+    def __init__(self, dim8op,channelname,Cut,region,jR=8):#maybe it's meant to use the /SignalRegion?hmm
+        self.UHH2_Output = "/nfs/dust/cms/user/loemkerj/bachelor/CMSSW_10_2_16/src/UHH2/aQGCVVjjhadronic"
         gROOT.SetBatch(True)
         self.channel=channelname
         tosum=[]
@@ -57,7 +58,7 @@ class Set:
         self.SFiles=[]
 
         for i in range(len(tosum)):
-            self.SFiles.append(TFile(self.UHH2_Output + "/%s/uhh2.AnalysisModuleRunner.MC.MC_aQGC_%sjj_hadronic.root"%(region,tosum[i])))
+            self.SFiles.append(TFile(self.UHH2_Output + "/%s/uhh2.AnalysisModuleRunner.MC.MC_aQGC_%sjj_hadronic_2016v3.root"%(region,tosum[i])))
 
         ##Open File to get BackgroundHist:
         self.BFile = TFile(self.UHH2_Output + "/%s/uhh2.AnalysisModuleRunner.MC.MC_QCD.root"%region)
@@ -127,6 +128,8 @@ class Set:
             self.dijetbinning.append(boundaries[i])
 
     def CombinedRootFiles(self,path='',VBF_cut='invMAk4sel_1p0'):
+        #pT_suffix = 'pT'
+        mjj_suffix = '_mjj'
         VBF=(self.LastCut==VBF_cut)
         if(VBF):
             name_suffix='_afterVBFsel'
@@ -136,11 +139,12 @@ class Set:
         for i in range(len(self.SHists)):         
            filename=self.getFileName(i)
            if(VBF):
-               oFile= TFile(path+"/%s.root"%filename,"UPDATE");
+               oFile= TFile(path+"/%s_mjj.root"%filename,"UPDATE");
+               #pT_file = TFile(path+"/%s.root"%filename,"UPDATE");
                # file= TFile(path+"/%s_SignalInjection.root"%filename,"UPDATE");
                # file= TFile(path+"/%s_SidebandData.root"%filename,"UPDATE");
            else:
-               oFile= TFile(path+"/%s.root"%filename,"RECREATE");
+               oFile= TFile(path+"/%s_mjj.root"%filename,"RECREATE");
                # file= TFile(path+"/%s_SignalInjection.root"%filename,"RECREATE");
                # file= TFile(path+"/%s_SidebandData.root"%filename,"RECREATE");
            if(not oFile.IsOpen()):
@@ -164,19 +168,23 @@ class Set:
            # backgroundHist.Write('qcd_invMass'+name_suffix)
            # sidebandDataHist.Write('data_invMass'+name_suffix)
 
-           # #For SignalInjectionTest
-           #signalHist=self.SHists[i]
+           import numpy as np
+           binning = np.linspace(0,10000,10001)
+           signalHist=self.SHists[i].Rebin(len(binning)-1, '', binning)
+           backgroundHist=self.BHist.Rebin(len(binning)-1, '', binning)
+           # #For SignalInjectionTest #try this -> sig+bg shapes to pseudo sig+bg points
+           #signalHist=self.SHists[i] 
            #backgroundHist=self.BHist
-           #fakedataHist=backgroundHist.Clone()
-           #fakedataHist.Add(signalHist)
-           #signalHist.Write('radion_invMass'+name_suffix)
-           #backgroundHist.Write('qcd_invMass'+name_suffix)
-           #fakedataHist.Write('data_invMass'+name_suffix)
+           fakedataHist=backgroundHist.Clone()
+           fakedataHist.Add(signalHist)
+           signalHist.Write('radion_invMass'+name_suffix)
+           backgroundHist.Write('qcd_invMass'+name_suffix)
+           fakedataHist.Write('data_invMass'+name_suffix)
 
-           #Standard (with Background as FakeData)
-           self.SHists[i].Write('radion_invMass'+name_suffix)
-           self.BHist.Write('qcd_invMass'+name_suffix)
-           self.BHist.Write('data_invMass'+name_suffix)
+           #Standard (with Background as FakeData)-> sig +bg shape  to bg(pseudodata)points
+           #self.SHists[i].Write('radion_invMass'+name_suffix)
+           #self.BHist.Write('qcd_invMass'+name_suffix)
+           #self.BHist.Write('data_invMass'+name_suffix)
            update_progress(i+1,len(self.SHists))
            oFile.Close()
 
