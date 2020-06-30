@@ -115,11 +115,8 @@ class Set:
         #         continue
         #     self.SHists.append(key.ReadObj())
 
-        # self.RefHist=self.SFile.Get('%s/M_jj_AK%i_highbin'%(self.LastCut,self.jetRadius))
-        #BHistDir_name = tmpCut if tmpCut=="Kin_AK8" else 'Kin_AK8_%s'%(tmpCut)
-        #BHistDir=self.BFile.GetDirectory(BHistDir_name)
-        #self.BHist=BHistDir.Get('%s/pT_AK%i_12'%(self.LastCut,self.jetRadius))
-        self.BHist=self.BFile.Get('%s/pT_AK%i_12'%(self.LastCut,self.jetRadius))
+        BHistDir_name = tmpCut if tmpCut=="Kin_AK8" else 'Kin_AK8_%s'%(tmpCut)
+        self.BHist=self.BFile.Get('%s/pT_AK%i_12'%(BHistDir_name,self.jetRadius))
         # self.sidebandDataFile=TFile(self.UHH2_Output + '/SidebandRegion/uhh2.AnalysisModuleRunner.Data.DATA.root')
         # self.sidebandDataHist=self.sidebandDataFile.Get('%s/M_jj_AK%i_highbin'%(self.LastCut,self.jetRadius))
         ##################################################################################################################################
