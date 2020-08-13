@@ -66,7 +66,8 @@ def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSign
                'AK4N2sel',
                'OpSignsel',
                'detaAk4sel',
-               'invMAk4sel_1p0'
+               'invMAk4sel_1p0',
+               'Kin_AK8'
     ]
 
     cutnames=['cleaner','AK8N2sel','invMAk8sel','detaAk8sel','softdropAK8sel','tau21sel','AK4cleaner','AK4N2sel','OpSignsel','detaAk4sel','invMAk4sel_1p0']
@@ -188,10 +189,10 @@ def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSign
     #Open File to get DataHist:
    # DataFile = TFile(path+"/uhh2.AnalysisModuleRunner.Data.DATA.root")
 
-    # gROOT.ProcessLine( "gErrorIgnoreLevel = 0;")
+    #gROOT.ProcessLine( "gErrorIgnoreLevel = 0;")
 
 
-    if(includeData):
+    if(includeData==True):
         #calculate QCDscale with Integrals from the following Histogram:
         # referenceHistPath = 'tau21sel/N_AK4'
         # referenceHistPath = 'detaAk8sel/N_pv'
@@ -219,8 +220,8 @@ def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSign
         if('QCD' in BFiles[i].GetName()):
             BHists[-1].Scale(QCDscale)
 
-    if(includeData):
-        DataHist=DataFile.Get(plotdir+'/'+plot)
+    #if(includeData):
+    #    DataHist=DataFile.Get(plotdir+'/'+plot)
     
     if(binning=='dijetbinning'):
         fitbinning=array('d')
@@ -500,9 +501,9 @@ def plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSign
     # gc.collect()
     return 'done!'
 if(__name__=='__main__'):
-    plotdir='invMAk4sel_1p0'
-    plot='M_jj_AK8'
-    xTitle='Mjj [GeV]'
-    logY=True
-    plotter('invMAk4sel_1p0', 'M_jj_AK8', 'Mjj [GeV]', True)
+    #plotdir='invMAk4sel_1p0'
+    #plot='M_jj_AK8'
+    #xTitle='Mjj [GeV]'
+    #logY=True
+    plotter('', '', '[GeV]', True)
 #this works! Nice -> results in /plot directory :) ggf. lables checken wegen CR..aber kommt der glaube ich ganz gut nahe

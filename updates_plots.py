@@ -9,7 +9,7 @@ if(__name__=='__main__'):
     
     channel='ZZ'
     #plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSignal=0)
-    includeData=True
+    includeData=False
     plots=[         
         ('N_AK4','N_{AK4}',True,[channel],includeData,0.01),
         ('eta_AK4_12','#eta^{two leading AK4}',False,[channel],includeData,0.01),
@@ -58,7 +58,7 @@ if(__name__=='__main__'):
     # RegionPaths=['SignalRegion/tau21sel_45','SignalRegion/tau21sel_35']#,'HIGHSidebandRegion','HIGHSidebandRegionRmEvent']
     # RegionPaths=['SignalRegion/tau21sel_45']#,'HIGHSidebandRegion','HIGHSidebandRegionRmEvent']
     # RegionPaths=['SignalRegion/tau21sel_45','SignalRegion/tau21sel_45/backup','SignalRegion/tau21sel_35','SignalRegion/tau21sel_35/backup']
-    RegionPaths=['SignalRegion','SidebandRegion']
+    RegionPaths=['SignalRegion']
     # RegionPaths=['PreSelection']
     counter=0
     for Region in RegionPaths:
@@ -66,7 +66,7 @@ if(__name__=='__main__'):
             for args in plots:
                 print('---------------------------------------------------')
                 args=(cut,)+args
-                args=args+('/nfs/dust/cms/user/albrechs/UHH2_Output/'+Region,)
+                args=args+('/nfs/dust/cms/user/loemkerj/bachelor/CMSSW_10_2_16/src/UHH2/aQGCVVjjhadronic/'+Region,)
                 print(plotter(*args))
                 counter=counter+1
                 print('--------------------------%03i-----------------------'%counter)

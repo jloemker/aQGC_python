@@ -30,7 +30,7 @@ if(__name__=='__main__'):
     
     channel='ZZ'
     #plotter(plotdir,plot,xTitle,logY,channels=['VV'],includeData=False,scaleSignal=0,UserRange=[XMin,XMax,YMin,YMax])
-    includeData=True
+    includeData=False
     defaultRange=[None,None,None,None]
     plots=[         
         ('N_pv','N_{PV}',True,[channel],includeData,0.01,defaultRange),
@@ -88,7 +88,7 @@ if(__name__=='__main__'):
     # cuts = ['invMAk8sel','detaAk8sel','AK8N2sel','preselection','softdropAK8sel','tau21sel','deltaR48','VVRegion','AK4N2sel','OpSignsel','detaAk4sel','invMAk4sel_1p0']
     cuts = ['invMAk8sel','detaAk8sel','AK8N2sel','softdropAK8sel','tau21sel','deltaR48','VVRegion','AK4N2sel','OpSignsel','detaAk4sel','invMAk4sel_1p0']
     # cuts = ['AK8N2sel','softdropAK8sel']
-    RegionPaths=['SignalRegion','SidebandRegion']
+    RegionPaths=['SignalRegion']
     # RegionPaths=['SignalRegion']
     # RegionPaths=['PreSelection']
     NPlots=len(plots)*len(cuts)*len(RegionPaths)
@@ -98,7 +98,7 @@ if(__name__=='__main__'):
             for args in plots:
                 # print('---------------------------------------------------')
                 args=(cut,)+args
-                args=args+('/nfs/dust/cms/user/albrechs/UHH2_Output/'+Region,)
+                args=args+('/nfs/dust/cms/user/loemkerj/bachelor/CMSSW_10_2_16/src/UHH2/aQGCVVjjhadronic/'+Region,)
                 plotter(*args)
                 update_progress(counter,NPlots)
                 counter=counter+1

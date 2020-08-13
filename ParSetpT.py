@@ -114,8 +114,10 @@ class Set:
         #     if ( (dim8op not in str(key)) or (('AK%i'%self.jetRadius) not in str(key))): 
         #         continue
         #     self.SHists.append(key.ReadObj())
-
-        BHistDir_name = tmpCut if tmpCut=="Kin_AK8" else 'Kin_AK8_%s'%(tmpCut)
+        
+        #BHistDir_name = tmpCut if tmpCut=="VVRegion" else 'VVRegion%s'%(tmpCut)
+        #BHistDir_name = tmpCut if tmpCut=="invMAk4sel_1p0" else 'invMAk4sel_1p0%s'%(tmpCut)
+        BHistDir_name = "VVRegion" if tmpCut=="VVRegion" else "invMAk4sel_1p0"      
         self.BHist=self.BFile.Get('%s/pT_AK%i_12'%(BHistDir_name,self.jetRadius))
         # self.sidebandDataFile=TFile(self.UHH2_Output + '/SidebandRegion/uhh2.AnalysisModuleRunner.Data.DATA.root')
         # self.sidebandDataHist=self.sidebandDataFile.Get('%s/M_jj_AK%i_highbin'%(self.LastCut,self.jetRadius))
@@ -177,16 +179,17 @@ class Set:
            # #For SignalInjectionTest #try this -> sig+bg shapes to pseudo sig+bg points
            #signalHist=self.SHists[i] 
            #backgroundHist=self.BHist
-           fakedataHist=backgroundHist.Clone()
-           fakedataHist.Add(signalHist)
-           signalHist.Write('radion_pT'+name_suffix)
-           backgroundHist.Write('qcd_pT'+name_suffix)
-           fakedataHist.Write('data_pT'+name_suffix)
-
+           #fakedataHist=backgroundHist.Clone()
+           #fakedataHist.Add(signalHist)
+           #signalHist.Write('radion_invMass'+name_suffix)
+           #backgroundHist.Write('qcd_invMass'+name_suffix)
+           #fakedataHist.Write('data_invMass'+name_suffix)
+           signalHist.Scale(4.178272981)
+           backgroundHist.Scale(4.178272981)
            #Standard (with Background as FakeData)-> sig +bg shape  to bg(pseudodata)points
-           #self.SHists[i].Write('radion_invMass'+name_suffix)
-           #self.BHist.Write('qcd_invMass'+name_suffix)
-           #self.BHist.Write('data_invMass'+name_suffix)
+           signalHist.Write('radion_invMass'+name_suffix)
+           backgroundHist.Write('qcd_invMass'+name_suffix)
+           backgroundHist.Write('data_invMass'+name_suffix)
            update_progress(i+1,len(self.SHists))
            oFile.Close()
 

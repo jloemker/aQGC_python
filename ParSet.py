@@ -175,16 +175,17 @@ class Set:
            # #For SignalInjectionTest #try this -> sig+bg shapes to pseudo sig+bg points
            #signalHist=self.SHists[i] 
            #backgroundHist=self.BHist
-           fakedataHist=backgroundHist.Clone()
-           fakedataHist.Add(signalHist)
+           #fakedataHist=backgroundHist.Clone()
+           #fakedataHist.Add(signalHist)
+           #signalHist.Write('radion_invMass'+name_suffix)
+           #backgroundHist.Write('qcd_invMass'+name_suffix)
+           #fakedataHist.Write('data_invMass'+name_suffix)
+           signalHist.Scale(4.178272981)
+           backgroundHist.Scale(4.178272981)
+           #Standard (with Background as FakeData)-> sig +bg shape  to bg(pseudodata)points
            signalHist.Write('radion_invMass'+name_suffix)
            backgroundHist.Write('qcd_invMass'+name_suffix)
-           fakedataHist.Write('data_invMass'+name_suffix)
-
-           #Standard (with Background as FakeData)-> sig +bg shape  to bg(pseudodata)points
-           #self.SHists[i].Write('radion_invMass'+name_suffix)
-           #self.BHist.Write('qcd_invMass'+name_suffix)
-           #self.BHist.Write('data_invMass'+name_suffix)
+           backgroundHist.Write('data_invMass'+name_suffix)
            update_progress(i+1,len(self.SHists))
            oFile.Close()
 
